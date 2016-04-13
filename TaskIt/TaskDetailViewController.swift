@@ -13,8 +13,6 @@ class TaskDetailViewController: UIViewController {
     //source control test
     var detailTaskModel: TaskModel!
     
-    var mainVC: ViewController!
-    
     @IBOutlet weak var taskTextField: UITextField!
     
     @IBOutlet weak var subtaskTextField: UITextField!
@@ -26,7 +24,7 @@ class TaskDetailViewController: UIViewController {
         
         self.taskTextField.text = detailTaskModel.task
         self.subtaskTextField.text = detailTaskModel.subtask
-        self.dueDatePicker.date = detailTaskModel.date
+        self.dueDatePicker.date = detailTaskModel.date!
 
     }
 
@@ -41,11 +39,14 @@ class TaskDetailViewController: UIViewController {
     
     @IBAction func doneButtonPressed(sender: UIBarButtonItem) {
         
-        //make a new task instance from fields and date
-        let task = TaskModel(task: taskTextField.text!, subtask:subtaskTextField.text!, date: dueDatePicker.date, completed: false)
+        let appDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
         
-        //set the mainVC's baseArray for section 0 to
-        mainVC.baseArray[0][mainVC.tableView.indexPathForSelectedRow!.row] = task
+        detailTaskModel.task = taskTextField.text
+        detailTaskModel.subtask = subtaskTextField.text
+        detailTaskModel.date = dueDatePicker.date
+        detailTaskModel.completed = detailTaskModel.completed
+        
+        appDelegate.saveContext()
         
         self.navigationController?.popViewControllerAnimated(true)
     }
