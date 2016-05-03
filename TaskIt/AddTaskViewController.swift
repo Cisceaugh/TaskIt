@@ -32,17 +32,13 @@ class AddTaskViewController: UIViewController {
     
     @IBAction func addTaskButtonPressed(sender: UIButton) {
         
-            //get access to appDelegate
         let appDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
         
-            //get access to managedObject from appDelegate
         let managedObjectContext = appDelegate.managedObjectContext
         
-            //create description that describes entity from CoreData, returns entity description with specified name
         let entityDescription = NSEntityDescription.entityForName("TaskModel", inManagedObjectContext: managedObjectContext)
-            //create TaskModel instance, initialize with TaskModel entity name and put it into apps managedObjectContext
+
         let task = TaskModel(entity: entityDescription!, insertIntoManagedObjectContext: managedObjectContext)
-        
         
         task.task = taskTextField.text
         task.subtask = subtaskTextField.text
@@ -51,27 +47,17 @@ class AddTaskViewController: UIViewController {
         
         appDelegate.saveContext()
         
-            //request all instances of TaskModel
         let request = NSFetchRequest(entityName: "TaskModel")
-            //make an error
         let error:NSError? = nil
         
         do {
-            //do a fetch request for entities named TaskModel
             let results: NSArray = try managedObjectContext.executeFetchRequest(request)
-            
-            //success
             for res in results {
                 print(res)
             }
-
         } catch _ {
-            
-            //failure
             print(error)
         }
-        
-        
         
         self.dismissViewControllerAnimated(true, completion: nil)
     }

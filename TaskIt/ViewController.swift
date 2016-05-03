@@ -29,7 +29,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         } catch _ {
             print("Could not perform fetch")
         }
-        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -95,11 +94,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == 0 {
-            return "To do"
+        
+        if fetchedResultsController.sections?.count == 1 {
+            let fetchedObjects = fetchedResultsController.fetchedObjects!
+            let testTask: TaskModel = fetchedObjects[0] as! TaskModel
+            if testTask.completed == true {
+                return "Completed"
+            } else {
+                return "To do"
+            }
         }
         else {
-            return "Completed"
+            if section == 0 {
+                return "To do"
+            }
+            else {
+                return "Completed"
+            }
         }
     }
     
@@ -113,6 +124,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             thisTask.completed = false
         }
         (UIApplication.sharedApplication().delegate as! AppDelegate).saveContext()
+        tableView.reloadData()
         
     }
     
